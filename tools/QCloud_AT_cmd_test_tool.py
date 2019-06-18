@@ -60,9 +60,9 @@ import hashlib
 
 # IoT Explorer 测试 ############################################
 # IoT Explorer 测试可根据需要修改以下设备信息及测试msg内容
-IE_Product_ID = "YOUR_PRODUCT_ID"
-IE_Device_Name = "YOUR_DEVICE_NAME"
-IE_Device_Key = "YOUR_DEVICE_KEY"
+IE_Product_ID = "LN19CSVR64"
+IE_Device_Name = "door1"
+IE_Device_Key = "BhKEOITUbhtxU2z7rW+d0Q=="
 
 
 def gen_template_update_msg():
@@ -100,9 +100,9 @@ def gen_event_post_msg():
 
 # IoT Hub 测试 ################################################
 # IoT Hub 测试可根据需要修改以下设备信息及测试topic和msg内容
-Hub_Product_ID = 'YOUR_PRODUCT_ID'
-Hub_Device_Name = 'YOUR_DEVICE_NAME'
-Hub_Device_Key = 'YOUR_DEVICE_KEY'
+Hub_Product_ID = 'LN19CSVR64'
+Hub_Device_Name = 'door1'
+Hub_Device_Key = 'BhKEOITUbhtxU2z7rW+d0Q=='
 
 HubTestTopic = '''%s/%s/data''' % (Hub_Product_ID, Hub_Device_Name)
 HubTestLongMsg = '1HELLO1234567890987654321world1234567890987654321QAZWSXEDCRFVTGBYHNUJMIKOPqazwsxedcrfvtgbyhnujmikolp' \
@@ -130,7 +130,7 @@ OTA_local_version = '1.0.0'
 ############################## AT MODULE CODE ################################
 # AT模组 定制化代码 #####################################################
 def esp_at_add_escapes(raw_str):
-    return raw_str.replace('\"', '\\\"').replace(',', '\\,')
+    return raw_str
 
 def nw_at_add_escapes(raw_str):
     return raw_str.replace('\"', '\\\"')
@@ -151,7 +151,7 @@ g_at_module_custom_params = {
     }
 
 # 模组串口配置，可以根据模组具体情况修改，使用的串口名字和波特率可以在程序启动参数指定
-g_serial_port = 'COM8'
+g_serial_port = 'COM19'
 g_serial_baudrate = 115200
 g_serial_bytesize = serial.EIGHTBITS
 g_serial_parity = serial.PARITY_NONE
@@ -488,7 +488,7 @@ class IoTBaseATCmd:
             return False
 
         hint = "AT+TCMQTTPUBL Send msg"
-        ok_reply = '+TCMQTTPUBL:OK'
+        ok_reply = '+TCMQTTPUB:OK'
         if not self.serial.do_one_at_cmd(msg, ok_reply, hint, self.err_list, 10*self.cmd_timeout):
             print('ERR: pub long msg failed: ', msg)
             return False
@@ -1350,7 +1350,8 @@ def nw_network_connect():
 
 def at_module_network_connect(at_module):
     if at_module == 'ESP8266':
-        return ESPWiFiATCmd().do_network_connection(WiFi_SSID, WiFi_PSWD)
+        #return ESPWiFiATCmd().do_network_connection(WiFi_SSID, WiFi_PSWD)
+        return True
     elif at_module == 'NW-N21':
         return nw_network_connect()
     else:
